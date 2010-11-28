@@ -4,12 +4,10 @@
 pc12.py
 
 Created by Shadanan Sharma on 2010-04-22.
-Copyright (c) 2010 __MyCompanyName__. All rights reserved.
 """
 
 import sys
 import os
-import Image
 import math
 
 def factor(n):
@@ -57,18 +55,10 @@ def main():
     
     for index, val in enumerate(data):
         files[index % 5].write(val)
-        # print index, str(val)
-    # print "\n".join(map(str, data))
     
     for f in files:
         f.close()
     
-    # data = partition(data, 5)
-    # #data = e2data
-    # oim = Image.new('RGB', (640, 480))
-    # oim.putdata(data)
-    # oim.show()
-
 if __name__ == '__main__':
     main()
 
