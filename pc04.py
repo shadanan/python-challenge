@@ -3,8 +3,8 @@
 
 import urllib
 
-nothing = "12345"
-nothing = 92118/2
+nothing = 12345
+# nothing = 92118/2
 while True:
     fp = urllib.urlopen("http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=%s" % nothing)
     data = fp.read()
