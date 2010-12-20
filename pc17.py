@@ -7,7 +7,6 @@ from xmlrpclib import ServerProxy
 
 cookie_data = []
 nothing = 12345
-bhandle = bz2.BZ2Decompressor()
 
 while True:
     response = urllib2.urlopen("http://www.pythonchallenge.com/pc/def/linkedlist.php?busynothing=%s" % nothing)
@@ -35,3 +34,9 @@ print bz2.decompress("".join(cookie_data))
 print "Calling Mozart's father, Leopold..."
 server = ServerProxy("http://www.pythonchallenge.com/pc/phonebook.php")
 print server.phone("Leopold")
+
+headers = {}
+headers["Cookie"] = "info=the+flowers+are+on+their+way"
+request = urllib2.Request("http://www.pythonchallenge.com/pc/stuff/violin.php", headers=headers)
+response = urllib2.urlopen(request)
+print response.read()
