@@ -7,14 +7,12 @@ dest = Image.new('P', (1500, 500))
 dest.putpalette(src.getpalette())
 
 counter = 0
-start_points = []
 posx, posy = 0, 0
 
 for index, pixel in enumerate(src.getdata()):
     dest.putpixel((posx, posy), pixel)
     
     if counter == 5:
-        start_points.append(index - 5)
         posy += 1
         posx = 0
     
