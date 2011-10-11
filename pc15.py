@@ -2,7 +2,6 @@
 # encoding: utf-8
 
 import datetime
-import pcutils
 
 def is_leap_year(year):
     if year % 400 == 0:
