@@ -51,4 +51,4 @@ while li < len(left) or ri < len(right):
 
 fp.close()
 
-# Open the file 'deltas.png' and you get
+# Open the file 'deltas.png' and you get '../hex/bin.html'
