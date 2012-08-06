@@ -1,55 +1,54 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-def save_to_file(file_name, data):
-    fp = open(file_name, 'w')
-    for c in data:
-        fp.write(chr(c))
-    fp.close()
+# Start at: http://www.pythonchallenge.com/pc/return/balloons.html
+# Can you tell the difference? It is the brightness...
+# http://www.pythonchallenge.com/pc/return/brightness.html
+# Source says: consider deltas.gz
+# wget http://www.pythonchallenge.com/pc/return/deltas.gz
+# gunzip deltas.gz
+
+def to_binary(string):
+    return 
+    
+left = []
+right = []
+li, ri = (0, 0)
+bin_data = []
 
 fp = open('deltas', 'r')
 data = fp.read()
+fp.close()
 
-lines = data.splitlines()
-print "Total Lines: %d" % len(lines)
-print "Elements per line: %d" % len(lines[0].split("   ")[0].split())
+for line in data.splitlines():
+    data = line[0:53].strip()
+    if data != '':
+        left.append(data)
 
-p1 = []
-p2 = []
-p3 = []
-p4 = []
+    data = line[56:].strip()
+    if data != '':
+        right.append(data)
 
-left_mode = 0
-right_mode = 0
+fp = open('deltas.png', 'w')
 
-for line in lines:
-    # print line
+while li < len(left) or ri < len(right):
+    if li == len(left):
+        ri += 1
     
-    if left_mode == 1:
-        p3 += map(lambda x: int(x, 16), line[0:53].split())
+    elif ri == len(right):
+        li += 1
     
-    if right_mode == 1:
-        p4 += map(lambda x: int(x, 16), line[56:].split())
-
-    if left_mode == 0:
-        temp = map(lambda x: int(x, 16), line[0:53].split())
-        p1 += temp
-        if len(temp) != 18:
-            left_mode = 1
+    elif left[li] == right[ri]:
+        fp.write("".join([chr(int(x, 16)) for x in left[li].split()]))
+        li += 1
+        ri += 1
     
-    if right_mode == 0:
-        temp = map(lambda x: int(x, 16), line[56:].split())
-        p2 += temp
-        if len(temp) != 18:
-            right_mode = 1
+    elif left[li] not in right[ri:ri + 2]:
+        li += 1
     
-print len(p1)
-print len(p2)
-print len(p3)
-print len(p4)
+    elif right[ri] not in left[li:li + 2]:
+        ri += 1
 
-save_to_file('p1.png', p1)
-save_to_file('p2.png', p2)
-save_to_file('p3.png', p3)
-save_to_file('p4.png', p4)
+fp.close()
 
+# Open the file 'deltas.png' and you get
