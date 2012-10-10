@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+# Start at: http://www.pythonchallenge.com/pc/def/ocr.html
+# Get the characters from the source of the page
+
 chars = """
 %%$@_$^__#)^)&!_+]!*@&^}@[@%]()%+$&[(_@%+%$*^@$^!+]!&_#)_*}{}}!}_]$[%}@[{_@#_^{*
 @##&{#&{&)*%(]{{([*}@[@&]+!!*{)!}{%+{))])[!^})+)$]#{*+^((@^@}$[**$&^{$!@#$%)!@(&
@@ -1233,3 +1236,6 @@ for char in chars:
     if char in rarechars:
         result.append(char)
 print "".join(result)
+
+# Result is equality
+# Go to: http://www.pythonchallenge.com/pc/def/equality.html

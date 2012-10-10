@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+# Start at: http://www.pythonchallenge.com/pc/return/italy.html
+
+# The image shows a spiral. And the HTML source contains the hint: 
+# <!-- remember: 100*100 = (100+99+99+98) + (...  -->
+# Let's process the image "wire.png" in a spiral like fashion...
+
 import Image
 
 src = Image.open('wire.png')
@@ -29,3 +35,9 @@ for i in xrange(10000):
         bnd[0] += 1
 
 img.show()
+
+# Result is a cat.
+# Go to: http://www.pythonchallenge.com/pc/return/cat.html
+
+# It says "and its name is uzi. you'll hear from him later."
+# Go to: http://www.pythonchallenge.com/pc/return/uzi.html

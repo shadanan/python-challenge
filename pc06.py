@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+# Start at: http://www.pythonchallenge.com/pc/def/channel.html
+# There's a zipper... try getting channel.zip? And then use the zipfile library?
 import zipfile
 import os
 
-# Initial nothing found in readme.txt
-nothing = 90052
-
 fp = zipfile.ZipFile('channel.zip')
+
+# The zip file contains a readme.txt file. It says to start from 90052.
+
+nothing = 90052
 
 files = {}
 for zo in fp.filelist:
@@ -19,6 +22,9 @@ def read_zip_file(fp, zip_file):
     data = fp.read()
     os.unlink(file_path)
     return data
+
+# There are characters in the comment of each file. Looks like we might need to 
+# concatenate them together in the order of the nothings...
 
 comment = []
 while True:
@@ -32,3 +38,11 @@ while True:
 
 print data
 print "".join(comment)
+
+# The result is an ascii picture that says HOCKEY using the letter OXYGEN.
+# That must be what the title of the page referrs to (now there are pairs).
+
+# If you go to: http://www.pythonchallenge.com/pc/def/hockey.html, it says
+# that "it's in the air. look at the letters.".
+
+# Go to: http://www.pythonchallenge.com/pc/def/oxygen.html

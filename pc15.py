@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+# Start at: http://www.pythonchallenge.com/pc/return/uzi.html
+
+# Page title is "whom?" and comments in HTML source code are:
+# "he ain't the youngest, he is the second" and
+# "todo: buy flowers for tomorrow"
+
+# The image is a calendar with the month January, 1*6. The 26th of the month 
+# is a Monday. The February list in the bottom show that it's a leap year. 
+# I think we need to find the year that matches these constraints.
+
 import datetime
 
 def is_leap_year(year):
@@ -21,3 +31,8 @@ for i in xrange(99, 0, -1):
         valid_dates.append(d)
 
 print valid_dates[1]
+
+# The year that matches is 1756. 
+# What's special about the day after January 26th, 1756? Check google:
+# Aha, mozart was born on that day!
+# Go to: http://www.pythonchallenge.com/pc/return/mozart.html

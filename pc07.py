@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+# Start at: http://www.pythonchallenge.com/pc/def/oxygen.html
+
+# It's an image with some gray values... maybe we should convert the
+# grayscale colour to an ascii value? We're going to need the 
+# Python Imaging Library for this.
+
 import Image
 
 img = Image.open(open('oxygen.png', 'r'))
@@ -12,3 +18,7 @@ result = "".join(result)
 
 print result
 print "".join(map(chr, eval(result[result.find('['):])))
+
+# result is [105, 110, 116, 101, 103, 114, 105, 116, 121] -> convert back to ascii
+# it says "integrity"
+# Go to: http://www.pythonchallenge.com/pc/def/integrity.html

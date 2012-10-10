@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+# Start at: http://www.pythonchallenge.com/pc/return/good.html
+
+# Source of the page says first+second=? and contains:
+# The image reminds me of connect the dots. So, let's connect the dots...
+
+import sys
+import pygame
+
 first = [146,399,163,403,170,393,169,391,166,386,170,381,170,371,170,355,169,346,167,335,170,329,170,320,170,
 310,171,301,173,290,178,289,182,287,188,286,190,286,192,291,194,296,195,305,194,307,191,312,190,316,
 190,321,192,331,193,338,196,341,197,346,199,352,198,360,197,366,197,373,196,380,197,383,196,387,192,
@@ -26,9 +34,6 @@ second = [156,141,165,135,169,131,176,130,187,134,191,140,191,146,186,150,179,15
 77,155,81,148,87,140,96,138,105,141,110,136,111,126,113,129,118,117,128,114,137,115,146,114,155,115,
 158,121,157,128,156,134,157,136,156,136]
 
-import sys
-import pygame
-
 pygame.init()
 window = pygame.display.set_mode((640, 480)) 
 
@@ -49,3 +54,6 @@ while True:
    for event in pygame.event.get(): 
       if event.type == pygame.QUIT: 
           sys.exit(0) 
+
+# Looks like a picture of a bull...
+# Go to: http://www.pythonchallenge.com/pc/return/bull.html
