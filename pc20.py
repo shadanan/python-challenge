@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 
 # Start at: http://www.pythonchallenge.com/pc/hex/idiot2.html
@@ -11,82 +11,79 @@
 # "Why don't you respect my privacy?"
 # Maybe we should read even further ahead? Perhaps loop over the end value?
 
-import os
-import httplib
-import base64
+import io
+import requests
+import zipfile
 
-def read_unreal(start, stop = ''):
-    conn = httplib.HTTPConnection('www.pythonchallenge.com')
-    conn.putrequest('GET', '/pc/hex/unreal.jpg')
-    
-    range_string = 'bytes=%s-%s' % (start, stop)
-    conn.putheader('Range', range_string)
-    
-    auth_string = base64.encodestring('butter:fly').replace('\n', '')
-    conn.putheader('Authorization', 'Basic %s' % auth_string)
-    
-    conn.endheaders()
-    conn.send('')
-    response = conn.getresponse()
-    
-    nrange = response.getheader('Content-Range')
-    if nrange is None:
+
+def read_unreal(start, stop=''):
+    response = requests.get('http://www.pythonchallenge.com/pc/hex/unreal.jpg',
+                            auth=('butter', 'fly'),
+                            headers={'Range': f'bytes={start}-{stop}'})
+
+    if 'Content-Range' not in response.headers:
         return None
+
+    nrange = response.headers['Content-Range']
     result = [int(x) for x in nrange.split(' ')[1].split('/')[0].split('-')]
-    result.append(response.read())
-    
-    conn.close()
-    return result
+    result.append(response.content)
+
+    return tuple(result)
+
 
 pos = 30203
 while True:
     curr = read_unreal(pos)
     if curr is None:
         break
-    print curr
+    print(curr)
     pos = curr[1] + 1
 
 # The result is:
-# [30203, 30236, "Why don't you respect my privacy?\n"]
-# [30237, 30283, 'we can go on in this way for really long time.\n']
-# [30284, 30294, 'stop this!\n']
-# [30295, 30312, 'invader! invader!\n']
-# [30313, 30346, 'ok, invader. you are inside now. \n']
+# (30203, 30236, b"Why don't you respect my privacy?\n")
+# (30237, 30283, b'we can go on in this way for really long time.\n')
+# (30284, 30294, b'stop this!\n')
+# (30295, 30312, b'invader! invader!\n')
+# (30313, 30346, b'ok, invader. you are inside now. \n')
 
 # If we visit: http://www.pythonchallenge.com/pc/hex/invader.html
 # We get: "Yes! that's you!"
 
 # Let's try reading from 2123456789
 
-print read_unreal(2123456789)
+print(read_unreal(2123456789))
 
-# It result is:
-# [2123456744, 2123456788, 'esrever ni emankcin wen ruoy si drowssap eht\n']
+# The result is:
+# (2123456744, 2123456788, b'esrever ni emankcin wen ruoy si drowssap eht\n')
 # That is, 'the password is your new nickname in reverse'. It must mean
 # 'invader' backwards ('redavni')
 # Let's try going down a number to see if there's anything else...
 
-print read_unreal(2123456743)
+print(read_unreal(2123456743))
 
-# It result is:
-# [2123456712, 2123456743, 'and it is hiding at 1152983631.\n']
+# The result is:
+# (2123456712, 2123456743, b'and it is hiding at 1152983631.\n')
 # The value at 1152983631 is some binary zip data.
 
 data = read_unreal(1152983631)[2]
-fp = open('invader.zip', 'wb')
-fp.write(data)
-fp.close()
+zf = zipfile.ZipFile(io.BytesIO(data))
 
-# Now unzip the file with the password "redavni" and you'll get two files:
+# Now list files in the zip file:
+
+print('\n'.join([x.filename for x in zf.filelist]))
+
 # readme.txt
 # package.pack
 
-# readme.txt says:
+# And if we read readme.txt, it says:
 
-# Yes! This is really level 21 in here. 
+with zf.open('readme.txt', pwd=b'redavni') as fp:
+    print(fp.read().decode('utf-8'))
+
+# Yes! This is really level 21 in here.
 # And yes, After you solve it, you'll be in level 22!
-# 
+#
 # Now for the level:
-# 
+#
 # * We used to play this game when we were kids
 # * When I had no idea what to do, I looked backwards.

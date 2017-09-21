@@ -1,43 +1,36 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 
 # Start at: http://www.pythonchallenge.com/pc/def/channel.html
 # There's a zipper... try getting channel.zip? And then use the zipfile library?
-import zipfile
-import os
 
-fp = zipfile.ZipFile('channel.zip')
+import io
+import urllib.request
+import zipfile
+
+with urllib.request.urlopen('http://www.pythonchallenge.com/pc/def/channel.zip') as fp:
+    zfp = zipfile.ZipFile(io.BytesIO(fp.read()))
 
 # The zip file contains a readme.txt file. It says to start from 90052.
-
 nothing = 90052
+files = {zo.filename: zo for zo in zfp.filelist}
 
-files = {}
-for zo in fp.filelist:
-    files[zo.filename] = zo
-
-def read_zip_file(fp, zip_file):
-    file_path = fp.extract(zip_file)
-    fp = open(file_path, 'r')
-    data = fp.read()
-    os.unlink(file_path)
-    return data
-
-# There are characters in the comment of each file. Looks like we might need to 
+# There are characters in the comment of each file. Looks like we might need to
 # concatenate them together in the order of the nothings...
 
-comment = []
+comments = []
 while True:
-    zip_file = files['%s.txt' % nothing]
-    comment.append(zip_file.comment)
-    data = read_zip_file(fp, zip_file)
+    zip_file = files[f'{nothing}.txt']
+    comments.append(zip_file.comment.decode('utf-8'))
+    with zfp.open(zip_file) as fp:
+        data = fp.read().decode('utf-8')
     if data.startswith("Next nothing is "):
         nothing = int(data.split()[-1])
     else:
         break
 
-print data
-print "".join(comment)
+print(data)
+print("".join(comments))
 
 # The result is an ascii picture that says HOCKEY using the letter OXYGEN.
 # That must be what the title of the page referrs to (now there are pairs).

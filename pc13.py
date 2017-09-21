@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 
 # Start at: http://www.pythonchallenge.com/pc/return/disproportional.html
@@ -7,10 +7,10 @@
 # of the phone takes us to '../phonebook.php'. The result is some sort of
 # XML file. This must be an RPC call...
 
-from xmlrpclib import ServerProxy
+from xmlrpc.client import ServerProxy
 server = ServerProxy("http://www.pythonchallenge.com/pc/phonebook.php")
 
-print server.phone("Bert")
+print(server.phone("Bert"))
 
 # The phonebook has the number 555-ITALY for Bert
 # Go to: http://www.pythonchallenge.com/pc/return/italy.html

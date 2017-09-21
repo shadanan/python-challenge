@@ -1,20 +1,21 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 
 # Start at: http://www.pythonchallenge.com/pc/def/linkedlist.php
 
-import urllib
+import urllib.request
 
 def process_nothing(nothing):
     while True:
-        fp = urllib.urlopen("http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=%s" % nothing)
-        data = fp.read()
+        url = f"http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing={nothing}"
+        with urllib.request.urlopen(url) as fp:
+            data = fp.read().decode('utf-8')
         if "nothing is" in data:
             nothing = data[data.find("nothing is"):].split()[2]
-            print data
+            print(data)
         else:
             break
-    print data
+    print(data)
 
 process_nothing(12345)
 

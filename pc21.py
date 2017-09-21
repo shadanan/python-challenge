@@ -30,12 +30,23 @@
 # every time we zlib decompress, write a space. Every time we bz2 decompressed
 # write an x. Every time we reverse, write a new line.
 
-import zlib
 import bz2
+import io
 import logging
-logging.basicConfig(level=logging.DEBUG)
+import requests
+import zipfile
+import zlib
 
-with open('package.pack', 'rb') as fp:
+
+# Load the zip file from the previous challenge
+response = requests.get('http://www.pythonchallenge.com/pc/hex/unreal.jpg',
+                        auth=('butter', 'fly'),
+                        headers={'Range': f'bytes={1152983631}-'})
+zf = zipfile.ZipFile(io.BytesIO(response.content))
+
+
+# Open package.pack from the zip file using the password redavni
+with zf.open('package.pack', pwd=b'redavni') as fp:
     sequence = []
     data = fp.read()
     while True:
@@ -55,16 +66,5 @@ with open('package.pack', 'rb') as fp:
 len(sequence)
 print(''.join(sequence))
 
-# The result is:
-#      xxx          xxx      xxxxxxxx    xxxxxxxx    xxxxxxxxxx  xxxxxxxx
-#    xxxxxxx      xxxxxxx    xxxxxxxxx   xxxxxxxxx   xxxxxxxxx   xxxxxxxxx
-#   xx     xx    xx     xx   xx      xx  xx      xx  xx          xx      xx
-#  xx           xx       xx  xx      xx  xx      xx  xx          xx      xx
-#  xx           xx       xx  xxxxxxxxx   xxxxxxxxx   xxxxxxxx    xxxxxxxxx
-#  xx           xx       xx  xxxxxxxx    xxxxxxxx    xxxxxxxx    xxxxxxxx
-#  xx           xx       xx  xx          xx          xx          xx   xx
-#   xx     xx    xx     xx   xx          xx          xx          xx    xx
-#    xxxxxxx      xxxxxxx    xx          xx          xxxxxxxxx   xx     xx
-#      xxx          xxx      xx          xx          xxxxxxxxxx  xx      xx
-
+# The result is an ascii picture that says "copper"
 # Visit http://www.pythonchallenge.com/pc/hex/copper.html

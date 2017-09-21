@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 
 # Start at: http://www.pythonchallenge.com/pc/return/balloons.html
@@ -6,58 +6,43 @@
 # Can you tell the difference? It is the brightness...
 # Go to: http://www.pythonchallenge.com/pc/return/brightness.html
 
-# Source says: consider deltas.gz
-# wget http://www.pythonchallenge.com/pc/return/deltas.gz
-# gunzip deltas.gz
+# Source says: maybe consider deltas.gz
 
 import difflib
+import gzip
+import tempfile
+import urllib.request
 
-def to_binary(string):
-    return 
-    
-left = []
-right = []
-li, ri = (0, 0)
-bin_data = []
+password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+password_mgr.add_password(realm=None,
+                          uri='http://www.pythonchallenge.com/pc/return/',
+                          user='huge',
+                          passwd='file')
+auth_handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
 
-fp = open('deltas', 'r')
-data = fp.read()
-fp.close()
+opener = urllib.request.build_opener(auth_handler)
+with opener.open('http://www.pythonchallenge.com/pc/return/deltas.gz') as fp:
+    data = gzip.decompress(fp.read()).decode('utf-8')
 
 # The file contains two sequences of lines... separate them.
-
-for line in data.splitlines():
-    data = line[0:53].strip()
-    if data != '':
-        left.append(data)
-
-    data = line[56:].strip()
-    if data != '':
-        right.append(data)
+left = [x.split('   ')[0] for x in data.splitlines()]
+right = [x.split('   ')[1] for x in data.splitlines()]
 
 # Looks like they are similar, but different. Separate into three streams,
 # one for what's equal, one with the left and one with the right.
+with tempfile.NamedTemporaryFile(mode='wb', suffix='.png', delete=False) as fp1, \
+        tempfile.NamedTemporaryFile(mode='wb', suffix='.png', delete=False) as fp2, \
+        tempfile.NamedTemporaryFile(mode='wb', suffix='.png', delete=False) as fp3:
+    for x in difflib.ndiff(left, right, charjunk=None):
+        # print(x)
+        if x.startswith('  '):
+            fp1.write(bytes([int(x, 16) for x in x[2:].split()]))
+        elif x.startswith('- '):
+            fp2.write(bytes([int(x, 16) for x in x[2:].split()]))
+        elif x.startswith('+ '):
+            fp3.write(bytes([int(x, 16) for x in x[2:].split()]))
 
-fp1 = open('deltas_equal.png', 'wb')
-fp2 = open('deltas_minus.png', 'wb')
-fp3 = open('deltas_plus.png', 'wb')
-
-for x in difflib.ndiff(left, right):
-    # print x
-    if x.startswith('  '):
-        fp1.write("".join([chr(int(c, 16)) for c in x[2:].split()]))
-    elif x.startswith('-'):
-        fp2.write("".join([chr(int(c, 16)) for c in x[2:].split()]))
-    elif x.startswith('+'):
-        fp3.write("".join([chr(int(c, 16)) for c in x[2:].split()]))
-
-fp1.close()
-fp2.close()
-fp3.close()
-
-# Open the file 'deltas_equal.png' and you get '../hex/bin.html'
-# Open the file 'deltas_minus.png' and you get 'fly' (password)
-# Open the file 'deltas_plus.png' and you get 'butter' (username)
-# Looks like I got it backwards...
+    print(f'Next: {fp1.name}, User: {fp3.name}, Pass: {fp2.name}')
 
 # Go to: http://www.pythonchallenge.com/pc/hex/bin.html
+# User: butter, Pass: fly

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 
 # Start at: http://www.pythonchallenge.com/pc/def/integrity.html
@@ -7,8 +7,22 @@
 # Use bz2 to decompress the username and password
 
 import bz2
-print bz2.decompress('BZh91AY&SYA\xaf\x82\r\x00\x00\x01\x01\x80\x02\xc0\x02\x00 \x00!\x9ah3M\x07<]\xc9\x14\xe1BA\x06\xbe\x084')
-print bz2.decompress('BZh91AY&SY\x94$|\x0e\x00\x00\x00\x81\x00\x03$ \x00!\x9ah3M\x13<]\xc9\x14\xe1BBP\x91\xf08')
+import urllib.request
 
-# un: huge, pw: file
+with urllib.request.urlopen('http://www.pythonchallenge.com/pc/def/integrity.html') as fp:
+    data = fp.read()
+
+def extract_field(data, field):
+    field_index = data.find(field)
+    first_quote_index = data.find(b"'", field_index) + 1
+    last_quote_index = data.find(b"'", first_quote_index)
+    return eval(b"b'%s'" % data[first_quote_index:last_quote_index])
+
+un = extract_field(data, b'un')
+pw = extract_field(data, b'pw')
+
+print(bz2.decompress(un))
+print(bz2.decompress(pw))
+
+# Click on the bee and authorize using un: huge, pw: file
 # You are redirected to: http://www.pythonchallenge.com/pc/return/good.html

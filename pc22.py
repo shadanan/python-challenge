@@ -8,7 +8,7 @@
 # white.gif!
 
 import urllib.request
-from PIL import Image, ImageOps, ImageDraw, ImageFont, ImageEnhance
+from PIL import Image, ImageDraw
 
 password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
 password_mgr.add_password(realm=None,
@@ -36,8 +36,8 @@ for i in range(im.n_frames):
 directions = [((x - 100), (y - 100)) for x, y in pseq]
 
 # Now let's trace an image using the directions
-sim = Image.new('P', (250, 60))
-draw = ImageDraw.Draw(sim)
+image = Image.new('P', (250, 60))
+draw = ImageDraw.Draw(image)
 offset = 0
 curr = (offset, 25)
 
@@ -49,8 +49,7 @@ for direction in directions:
     draw.line(curr + stop, fill=255)
     curr = stop
 
-with open('emulated.gif', 'wb') as fp:
-    sim.save(fp)
+image.show()
 
-# The resulting image, emulated.gif spells "bonus"!
+# The resulting image spells "bonus"!
 # Next level: http://www.pythonchallenge.com/pc/hex/bonus.html
