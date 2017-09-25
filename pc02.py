@@ -4,11 +4,11 @@
 # Start at: http://www.pythonchallenge.com/pc/def/ocr.html
 # Get the characters from the source of the page
 
-import urllib.request
+import requests
 
-with urllib.request.urlopen("http://www.pythonchallenge.com/pc/def/ocr.html") as fp:
-    data = fp.read().decode('utf-8').strip()
-    chars = data[data.find('%%'):-4]
+response = requests.get('http://www.pythonchallenge.com/pc/def/ocr.html')
+data = response.text.strip()
+chars = data[data.find('%%'):-4]
 
 hist = {}
 for char in chars:
@@ -19,7 +19,7 @@ result = []
 for char in chars:
     if char in rarechars:
         result.append(char)
-print("".join(result))
+print(''.join(result))
 
 # Result is equality
 # Go to: http://www.pythonchallenge.com/pc/def/equality.html

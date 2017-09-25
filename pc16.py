@@ -7,19 +7,12 @@
 # Try alligning the pink pixels.
 
 import io
-import urllib.request
+import requests
 from PIL import Image
 
-password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-password_mgr.add_password(realm=None,
-                          uri='http://www.pythonchallenge.com/pc/return/',
-                          user='huge',
-                          passwd='file')
-auth_handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-
-opener = urllib.request.build_opener(auth_handler)
-with opener.open('http://www.pythonchallenge.com/pc/return/mozart.gif') as fp:
-    src = Image.open(fp)
+response = requests.get('http://www.pythonchallenge.com/pc/return/mozart.gif',
+                        auth=('huge', 'file'))
+src = Image.open(io.BytesIO(response.content))
 
 def straighten(source):
     target = source.copy()

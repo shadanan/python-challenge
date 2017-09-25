@@ -7,19 +7,12 @@
 # Source of the page says first+second=? and contains:
 # The image reminds me of connect the dots. So, let's connect the dots...
 
-import urllib.request
+import requests
 from PIL import Image, ImageDraw
 
-password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-password_mgr.add_password(realm=None,
-                          uri='http://www.pythonchallenge.com/pc/return/',
-                          user='huge',
-                          passwd='file')
-auth_handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-
-opener = urllib.request.build_opener(auth_handler)
-with opener.open('http://www.pythonchallenge.com/pc/return/good.html') as fp:
-    lines = fp.read().decode('utf-8').strip().split('\n')
+response = requests.get('http://www.pythonchallenge.com/pc/return/good.html',
+                        auth=('huge', 'file'))
+lines = response.text.strip().split('\n')
 
 first = eval(f"[{''.join(lines[lines.index('first:')+1:lines.index('', lines.index('first:'))])}]")
 second = eval(f"[{''.join(lines[lines.index('second:')+1:lines.index('', lines.index('second:'))])}]")

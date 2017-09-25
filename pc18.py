@@ -10,19 +10,12 @@
 
 import difflib
 import gzip
+import requests
 import tempfile
-import urllib.request
 
-password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-password_mgr.add_password(realm=None,
-                          uri='http://www.pythonchallenge.com/pc/return/',
-                          user='huge',
-                          passwd='file')
-auth_handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-
-opener = urllib.request.build_opener(auth_handler)
-with opener.open('http://www.pythonchallenge.com/pc/return/deltas.gz') as fp:
-    data = gzip.decompress(fp.read()).decode('utf-8')
+response = requests.get('http://www.pythonchallenge.com/pc/return/deltas.gz',
+                        auth=('huge', 'file'))
+data = gzip.decompress(response.content).decode('utf-8')
 
 # The file contains two sequences of lines... separate them.
 left = [x.split('   ')[0] for x in data.splitlines()]

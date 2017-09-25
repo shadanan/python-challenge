@@ -7,19 +7,13 @@
 # <!-- remember: 100*100 = (100+99+99+98) + (...  -->
 # Let's process the image "wire.png" in a spiral like fashion...
 
-import urllib.request
+import io
+import requests
 from PIL import Image
 
-password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-password_mgr.add_password(realm=None,
-                          uri='http://www.pythonchallenge.com/pc/return/',
-                          user='huge',
-                          passwd='file')
-auth_handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-
-opener = urllib.request.build_opener(auth_handler)
-with opener.open('http://www.pythonchallenge.com/pc/return/wire.png') as fp:
-    src = Image.open(fp)
+response = requests.get('http://www.pythonchallenge.com/pc/return/wire.png',
+                        auth=('huge', 'file'))
+src = Image.open(io.BytesIO(response.content))
 
 img = Image.new('RGB', (100, 100))
 data = []

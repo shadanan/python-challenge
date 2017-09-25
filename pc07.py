@@ -7,19 +7,20 @@
 # grayscale colour to an ascii value? We're going to need the
 # Python Imaging Library for this.
 
-import urllib.request
+import io
+import requests
 from PIL import Image
 
-with urllib.request.urlopen('http://www.pythonchallenge.com/pc/def/oxygen.png') as fp:
-    img = Image.open(fp)
+response = requests.get('http://www.pythonchallenge.com/pc/def/oxygen.png')
+img = Image.open(io.BytesIO(response.content))
 
 result = []
 for x in range(0, 608, 7):
     result.append(chr(img.getpixel((x, 50))[0]))
-result = "".join(result)
+result = ''.join(result)
 
 print(result)
-print("".join(map(chr, eval(result[result.find('['):]))))
+print(''.join(map(chr, eval(result[result.find('['):]))))
 
 # result is [105, 110, 116, 101, 103, 114, 105, 116, 121] -> convert back to ascii
 # it says "integrity"

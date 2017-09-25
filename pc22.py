@@ -7,19 +7,13 @@
 # source code says "or maybe white.gif would be more bright". Let's download
 # white.gif!
 
-import urllib.request
+import io
+import requests
 from PIL import Image, ImageDraw
 
-password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-password_mgr.add_password(realm=None,
-                          uri='http://www.pythonchallenge.com/pc/hex/',
-                          user='butter',
-                          passwd='fly')
-auth_handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-
-opener = urllib.request.build_opener(auth_handler)
-with opener.open('http://www.pythonchallenge.com/pc/hex/white.gif') as src:
-    im = Image.open(src)
+response = requests.get('http://www.pythonchallenge.com/pc/hex/white.gif',
+                        auth=('butter', 'fly'))
+im = Image.open(io.BytesIO(response.content))
 
 # white.gif contains 132 frames. Each frame has exactly one pixel that is not
 # black at x, y in {98, 100, 102}.

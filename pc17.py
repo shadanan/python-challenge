@@ -62,5 +62,5 @@ request = urllib.request.Request('http://www.pythonchallenge.com/pc/stuff/violin
 response = urllib.request.urlopen(request)
 print(response.read().decode('utf-8'))
 
-# Leopold seems irritated. He reminds us not to forget the balloons.
+# Leopold says: "oh well, don't you dare to forget the balloons."
 # Go to: http://www.pythonchallenge.com/pc/return/balloons.html

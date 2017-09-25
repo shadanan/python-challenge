@@ -3,13 +3,12 @@
 
 # Start at: http://www.pythonchallenge.com/pc/def/linkedlist.php
 
-import urllib.request
+import requests
 
 def process_nothing(nothing):
     while True:
-        url = f"http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing={nothing}"
-        with urllib.request.urlopen(url) as fp:
-            data = fp.read().decode('utf-8')
+        url = f'http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing={nothing}'
+        data = requests.get(url).text
         if "nothing is" in data:
             nothing = data[data.find("nothing is"):].split()[2]
             print(data)

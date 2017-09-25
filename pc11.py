@@ -5,19 +5,13 @@
 # The title of the page is odd / even. Let's look at every other
 # pixel and assemble it.
 
-import urllib.request
+import io
+import requests
 from PIL import Image, ImageDraw
 
-password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-password_mgr.add_password(realm=None,
-                          uri='http://www.pythonchallenge.com/pc/return/',
-                          user='huge',
-                          passwd='file')
-auth_handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-
-opener = urllib.request.build_opener(auth_handler)
-with opener.open('http://www.pythonchallenge.com/pc/return/cave.jpg') as fp:
-    src_image = Image.open(fp)
+response = requests.get('http://www.pythonchallenge.com/pc/return/cave.jpg',
+                        auth=('huge', 'file'))
+src_image = Image.open(io.BytesIO(response.content))
 
 src_data = src_image.getdata()
 

@@ -7,10 +7,10 @@
 # Use bz2 to decompress the username and password
 
 import bz2
-import urllib.request
+import requests
 
-with urllib.request.urlopen('http://www.pythonchallenge.com/pc/def/integrity.html') as fp:
-    data = fp.read()
+response = requests.get('http://www.pythonchallenge.com/pc/def/integrity.html')
+data = response.content
 
 def extract_field(data, field):
     field_index = data.find(field)
