@@ -7,27 +7,33 @@
 
 # Page title is "what is this module?"
 
-# There's a header comment:
-# TODO: do you owe someone an apology? now it is a good time to
-# tell him that you are sorry. Please show good manners although
-# it has nothing to do with this level.
-
-# Another comment after bonus.jpg:
+# Comment after bonus.jpg:
 # it can't find it. this is an undocumented module.
 
 # And one last footer comment:
 # 'va gur snpr bs jung?'
 
-# We can attempt a simple Caesar cipher decryption on 'va gur snpr bs jung?'
-# We find that if we shift the characters 13 steps forwards, precisely halfway
-# through the alphabet, we get 'in the face of what?'
+# this is *literally* an undocumented module
+import re
+import this
 
-def caesar_shift(c, offset=0):
-    if ord(c) >= ord('a') and ord(c) <= ord('z'):
-        return chr((ord(c) - 97 + offset) % 26 + 97)
-    return c
+# We can decode 'va gur snpr bs jung?' using the encoding provided in this.d:
+print(''.join([this.d.get(c, c) for c in 'va gur snpr bs jung?']))
+# Result is: 'in the face of what?'
 
-print(''.join([caesar_shift(c, 13) for c in 'va gur snpr bs jung?']))
+# When you import this, it prints out the zen of python.
+zen = ''.join(this.d.get(c, c) for c in this.s)
+
+# The line starting with 'In the face of' is: ambiguity
+print(re.findall(r'In the face of ([a-z]+)', zen)[0])
+
+# Next level: http://www.pythonchallenge.com/pc/hex/ambiguity.html
+
+
+# There's a header comment:
+# TODO: do you owe someone an apology? now it is a good time to
+# tell him that you are sorry. Please show good manners although
+# it has nothing to do with this level.
 
 # The header comment suggests we owe someone an apology. In level 19, the wav
 # file encoded in the email from leopold.moz@pythonchallenge.com contained the
@@ -35,6 +41,10 @@ print(''.join([caesar_shift(c, 13) for c in 'va gur snpr bs jung?']))
 
 # If you go to: http://www.pythonchallenge.com/pc/hex/sorry.html
 # it responds: - "what are you apologizing for?"
+
+# After you complete level 19, when you visit:
+# http://www.pythonchallenge.com/pc/hex/idiot.html
+# It says, "Now you should apologize..." under a picture of Leopold Mozart
 
 # If you send an email to leopold.moz@pythonchallenge.com
 # Subject: sorry
@@ -44,20 +54,11 @@ print(''.join([caesar_shift(c, 13) for c in 'va gur snpr bs jung?']))
 # From: "Leopold Mozart" <leopold.moz@pythonchallenge.com>
 # To: shadanan@gmail.com
 # Subject: Re: my broken zip
-#
+
 # Never mind that.
 # Have you found my broken zip?
 # md5: bbb8b499a0eef99b52c7f13f4e78c24b
 # Can you believe what one mistake can lead to?
 
-# So far:
-# apology for leopold
-# broken zip file (where is the broken zip file?)
-# Can you believe what one mistake can lead to? (what mistake?)
-# what is this module? (presumably it is undocumented)
-# in the face of what? (evil?, danger?)
-# it can't find it (what's it?)
-
-print(''.join([caesar_shift(c, 13) for c in 'bonus']))
-
-import vg
+# So, we're not there yet, but at some point, we need to find Leopold's broken
+# zip file.
