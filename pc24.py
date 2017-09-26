@@ -9,7 +9,6 @@
 import io
 import requests
 import zipfile
-from collections import namedtuple
 from PIL import Image
 
 
@@ -116,12 +115,13 @@ values = [img.getpixel(p)[0] for p in path]
 # The even values are all zero, and the odd values end up representing zip data
 zf = zipfile.ZipFile(io.BytesIO(bytearray(values[1::2])))
 
-# The files in the zip file are maze.jpg and mybroken.zip
-# Looks like we finally found Leopold's broken zip file!
-print('\n'.join([x.filename for x in zf.filelist]))
+if __name__ == '__main__':
+    # The files in the zip file are maze.jpg and mybroken.zip
+    # Looks like we finally found Leopold's broken zip file!
+    print('\n'.join([x.filename for x in zf.filelist]))
 
-# maze.jpg is a picture of a lake with the word "lake" in it
-with zf.open('maze.jpg') as fp:
-    Image.open(fp).show()
+    # maze.jpg is a picture of a lake with the word "lake" in it
+    with zf.open('maze.jpg') as fp:
+        Image.open(fp).show()
 
 # Go to: http://www.pythonchallenge.com/pc/hex/lake.html
