@@ -12,7 +12,6 @@
 import io
 import itertools
 import requests
-import tempfile
 import wave
 from PIL import Image
 
