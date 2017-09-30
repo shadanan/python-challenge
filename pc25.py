@@ -14,6 +14,7 @@ import itertools
 import requests
 import tempfile
 import wave
+from PIL import Image
 
 
 datas = []
@@ -28,31 +29,16 @@ for i in itertools.count(1):
 waves = [wave.open(io.BytesIO(r)) for r in datas]
 frames = [w.readframes(w.getnframes()) for w in waves]
 
-fp = wave.open('output.wav', 'wb')
+# The hint "can you see the waves?" prompted me to put the data into an image.
+# The puzzle piece overlay hints at the layout of the image data.
 
-fp.setparams(waves[0].getparams())
-# fp.setsampwidth(5)
-fp.setnchannels(5)
+img = Image.new('RGB', (300, 300))
+for i, frame in enumerate(frames):
+    x_offset, y_offset = (i % 5) * 60, (i // 5) * 60
+    for j, color in enumerate(zip(frame[0::3], frame[1::3], frame[2::3])):
+        img.putpixel((j % 60 + x_offset, j // 60 + y_offset), color)
 
-for i in range(waves[0].getnframes()):
-    for wav in waves:
-        fp.writeframes(frame[i])
+# The image is the original image with the word "decent" written on it
+img.show()
 
-for frame in frames:
-    fp.writeframes(frame)
-
-fp.
-
-fp.close()
-
-
-
-
-
-
-print(waves[0].getparams())
-
-x = zip([w.readframes(w.getnframes()) for w in waves])
-next(x)
-
-len(waves)
+# Go to: http://www.pythonchallenge.com/pc/hex/decent.html
