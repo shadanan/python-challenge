@@ -16,8 +16,8 @@
 
 import io
 import requests
-import tempfile
-from PIL import Image
+from PIL import Image, ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 response = requests.get('http://www.pythonchallenge.com/pc/return/evil2.gfx',
                         auth=('huge', 'file'))
@@ -26,19 +26,9 @@ data = response.content
 images = [Image.open(io.BytesIO(data[i::5])) for i in range(5)]
 
 for image in images:
-    try:
-        image.show()
-    except:
-        pass
+    image.show()
 
 # This results in 5 images that spell out:
 # (dis, pro, port, tional, ity), with the ity crossed out.
-
-# Note: The "tional" image (index 3) is truncated, and won't display. If we
-# save it to a file though, it will open in some forgiving image viewers.
-
-with tempfile.NamedTemporaryFile(mode='wb', suffix='.png', delete=False) as fp:
-    fp.write(data[3::5])
-    print(f'Open: {fp.name}')
 
 # Go to: http://www.pythonchallenge.com/pc/return/disproportional.html

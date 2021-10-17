@@ -28,37 +28,3 @@ zen = ''.join(this.d.get(c, c) for c in this.s)
 print(re.findall(r'In the face of ([a-z]+)', zen)[0])
 
 # Next level: http://www.pythonchallenge.com/pc/hex/ambiguity.html
-
-
-# There's a header comment:
-# TODO: do you owe someone an apology? now it is a good time to
-# tell him that you are sorry. Please show good manners although
-# it has nothing to do with this level.
-
-# The header comment suggests we owe someone an apology. In level 19, the wav
-# file encoded in the email from leopold.moz@pythonchallenge.com contained the
-# word "sorry".
-
-# If you go to: http://www.pythonchallenge.com/pc/hex/sorry.html
-# it responds: - "what are you apologizing for?"
-
-# After you complete level 19, when you visit:
-# http://www.pythonchallenge.com/pc/hex/idiot.html
-# It says, "Now you should apologize..." under a picture of Leopold Mozart
-
-# If you send an email to leopold.moz@pythonchallenge.com
-# Subject: sorry
-
-# You get a response:
-
-# From: "Leopold Mozart" <leopold.moz@pythonchallenge.com>
-# To: shadanan@gmail.com
-# Subject: Re: my broken zip
-
-# Never mind that.
-# Have you found my broken zip?
-# md5: bbb8b499a0eef99b52c7f13f4e78c24b
-# Can you believe what one mistake can lead to?
-
-# So, we're not there yet, but at some point, we need to find Leopold's broken
-# zip file.

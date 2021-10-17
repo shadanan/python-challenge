@@ -32,7 +32,6 @@
 
 import bz2
 import io
-import logging
 import requests
 import zipfile
 import zlib
