@@ -1,27 +1,2 @@
-*.pyc
-*.ipynb
-.project
-.pydevproject
-.settings/
-
-# pc12
-evil0.gif
-evil1.gif
-evil2.gif
-evil3.gif
-evil4.gif
-
-# pc16
-mozart_out.gif
-
-# pc18
-deltas_equal.png
-deltas_minus.png
-deltas_plus.png
-
-# pc19
-indian_original.wav
-indian_corrected.wav
-
-# pc20
-invader.zip
+/__pycache__
+/.ipynb_checkpoints
