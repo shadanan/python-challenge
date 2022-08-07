@@ -46,5 +46,7 @@ dst.show()
 # The result is: whodunnit().split()[0] ?
 print(bytes(nonpairs).decode("utf-8"))
 
+# So, who did Python? Guido!
+
 # Go to: http://www.pythonchallenge.com/pc/ring/guido.html
 # User: repeat, Pass: switch
