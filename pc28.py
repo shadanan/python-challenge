@@ -18,7 +18,6 @@ from PIL import Image
 response = requests.get(
     "http://www.pythonchallenge.com/pc/ring/bell.png", auth=("repeat", "switch")
 )
-
 src = Image.open(io.BytesIO(response.content))
 
 # There appears to be vertical lines encoded in the green channel.
