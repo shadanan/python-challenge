@@ -76,3 +76,9 @@ img = Image.new(mode="L", size=(width, height))
 for i, v in enumerate(err):
     img.putpixel((i % width, i // width), int(v * 255))
 img.show()
+
+# The resulting image is the Arecibo message:
+# https://en.m.wikipedia.org/wiki/Arecibo_message
+
+# Go to: http://www.pythonchallenge.com/pc/rock/arecibo.html
+# User: kohsamui, Pass: thailand
