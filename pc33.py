@@ -29,3 +29,39 @@ response = requests.get(
 )
 src = Image.open(io.BytesIO(response.content))
 src.show()
+
+import pandas as pd
+
+pd.set_option("display.max_rows", None)
+pd.set_option("display.max_columns", None)
+
+pixels = pd.Series(list(src.getdata()))
+pixels.value_counts().sort_index()
+pixels.value_counts().sort_index().plot.bar(figsize=(12, 6))
+
+import numpy as np
+
+pd.DataFrame(np.array(src))
+import sys
+
+np.set_printoptions(threshold=sys.maxsize)
+
+dst = src.copy()
+for y in range(dst.height):
+    for x in range(dst.width):
+        if dst.getpixel((x, y)) % 2 == 0:
+            dst.putpixel((x, y), 0)
+        elif dst.getpixel((x, y)) % 2 == 1:
+            dst.putpixel((x, y), 255)
+dst
+
+dst = Image.new(mode="RGB", size=(src.width // 3, src.height))
+for y in range(dst.height):
+    for x in range(dst.width):
+        color = (
+            src.getpixel((x * 3, y)),
+            src.getpixel((x * 3 + 1, y)),
+            src.getpixel((x * 3 + 2, y)),
+        )
+        dst.putpixel((x, y), color)
+dst
