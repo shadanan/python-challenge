@@ -21,7 +21,6 @@ import io
 from math import sqrt
 
 import httpx
-from IPython.display import display
 from PIL import Image
 
 # Grab the puzzle image.

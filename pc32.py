@@ -24,12 +24,13 @@ from typing import NamedTuple
 
 import numpy as np
 import requests
+from numpy.typing import NDArray
 from PIL import Image
 
 
 class Rules(NamedTuple):
-    rows: list[tuple[int]]
-    cols: list[tuple[int]]
+    rows: list[tuple[int, ...]]
+    cols: list[tuple[int, ...]]
 
 
 def parse_rules(text: str) -> Rules:
@@ -50,7 +51,7 @@ def parse_rules(text: str) -> Rules:
 
 
 # Generates the possible spacings between runs of a line.
-def spacings(length: int, clues: tuple[int]):
+def spacings(length: int, clues: tuple[int, ...]):
     groups = len(clues)
     spaces = length - sum(clues) + 1
     cumsum = list(itertools.chain([0], itertools.accumulate(clues)))
@@ -59,7 +60,7 @@ def spacings(length: int, clues: tuple[int]):
 
 
 # Generates all possible lines given the current constraints.
-def possible_lines(clues: tuple[int], constraint: np.array):
+def possible_lines(clues: tuple[int, ...], constraint: NDArray):
     results = []
     for offsets in spacings(len(constraint), clues):
         result = np.ones(len(constraint), dtype=np.int8) * -1
@@ -71,17 +72,15 @@ def possible_lines(clues: tuple[int], constraint: np.array):
 
 
 # Finds forcing elements for a set of all possible lines.
-def update_constraint(clues: tuple[int], constraint: np.array):
+def update_constraint(clues: tuple[int, ...], constraint: NDArray):
     lines = possible_lines(clues, constraint)
     nc = len(lines)
-    if nc == 0:
-        return None
     ls = lines.sum(axis=0)
     return np.where(ls == nc, 1, 0) + np.where(ls == -nc, -1, 0)
 
 
 # This function renders an image from the current nonogram state.
-def render(nonogram: np.array, scale: int = 10):
+def render(nonogram: NDArray, scale: int = 10):
     img = Image.fromarray((nonogram + 1), mode="P")
     img.putpalette([0, 0, 0, 127, 127, 127, 255, 255, 255])
     return img.resize([i * scale for i in img.size])
