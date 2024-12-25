@@ -10,10 +10,12 @@
 
 # Let's read the email in and decode it.
 
-import email
+import email.parser
 import io
 import tempfile
 import wave
+from email.mime.multipart import MIMEMultipart
+from typing import cast
 
 import httpx
 
@@ -26,8 +28,8 @@ data = response.text
 parser = email.parser.Parser()
 message = parser.parsestr(data[data.find("<!--") + 5 : data.find("-->")])
 
-attachment = message.get_payload()[0]
-original_wav = attachment.get_payload(decode=True)
+attachment = cast(list[MIMEMultipart], message.get_payload())
+original_wav = cast(bytes, attachment[0].get_payload(decode=True))
 
 with tempfile.NamedTemporaryFile(mode="wb", suffix=".wav", delete=False) as fp:
     fp.write(original_wav)

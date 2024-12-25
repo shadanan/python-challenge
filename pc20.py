@@ -28,10 +28,8 @@ def read_unreal(start, stop=""):
         return None
 
     nrange = response.headers["Content-Range"]
-    result = [int(x) for x in nrange.split(" ")[1].split("/")[0].split("-")]
-    result.append(response.content)
-
-    return tuple(result)
+    x, y = nrange.split(" ")[1].split("/")[0].split("-")
+    return int(x), int(y), response.content
 
 
 pos = 30203
@@ -68,8 +66,9 @@ print(read_unreal(2123456743))
 # (2123456712, 2123456743, b'and it is hiding at 1152983631.\n')
 # The value at 1152983631 is some binary zip data.
 
-data = read_unreal(1152983631)[2]
-zf = zipfile.ZipFile(io.BytesIO(data))
+data = read_unreal(1152983631)
+assert data is not None
+zf = zipfile.ZipFile(io.BytesIO(data[2]))
 
 # Now list files in the zip file:
 

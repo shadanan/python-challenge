@@ -8,6 +8,7 @@
 
 import io
 import zipfile
+from typing import cast
 
 import httpx
 from PIL import Image
@@ -69,9 +70,8 @@ def solve(maze, start, exit):
     viables = {}
 
     while True:
-        # If our path is empty, we didn't find a solution
         if not path:
-            return None
+            raise Exception("Failed to find a solution")
 
         pos = path[-1]
 
@@ -106,7 +106,7 @@ maze = Maze(img.width, img.height)
 # Convert the pixel data into maze data
 for x in range(img.width):
     for y in range(img.height):
-        r, g, b, _ = img.getpixel((x, y))
+        r, g, b, _ = cast(tuple[int, ...], img.getpixel((x, y)))
         if r >= 127 and g >= 127 and b >= 127:
             maze[x, y] = 1
         else:
@@ -116,11 +116,12 @@ for x in range(img.width):
 path = solve(maze, (639, 0), (1, 640))
 
 # Get the red component of the color data for each point along the path
-values = [img.getpixel(p)[0] for p in path]
+values = [cast(tuple[int, ...], img.getpixel(p))[0] for p in path]
 
 # The even values are all zero, and the odd values end up representing zip data
 zf = zipfile.ZipFile(io.BytesIO(bytearray(values[1::2])))
 
+# This if __name__ is so that we can reuse this code in level 26
 if __name__ == "__main__":
     # The files in the zip file are maze.jpg and mybroken.zip
     # Looks like we finally found Leopold's broken zip file!

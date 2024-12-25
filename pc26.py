@@ -44,13 +44,16 @@
 
 import hashlib
 import io
-import pc24
 import zipfile
+
 from PIL import Image
+
+import pc24
 
 # Read zip data
 with pc24.zf.open("mybroken.zip") as fp:
     broken = fp.read()
+
 
 # The email from Leopold contains an md5 hex digest. Try repairing the zip file
 # assuming that one of the bytes is incorrect.
