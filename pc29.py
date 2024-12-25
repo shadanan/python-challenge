@@ -29,10 +29,10 @@ response = httpx.get(
 )
 
 # Get the lines that are whitespace
-whitespace_lines = [l for l in response.text.split("\n") if re.match(r"^\s*$", l)]
+lines = [line for line in response.text.split("\n") if re.match(r"^\s*$", line)]
 
 # Count the length of the whitespace lines
-line_lengths = [len(l) for l in whitespace_lines]
+line_lengths = [len(line) for line in lines]
 
 # Convert the length data into bytes (looks like bzip!)
 data = bytes(line_lengths)

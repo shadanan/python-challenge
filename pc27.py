@@ -31,6 +31,7 @@ data = src.tobytes()
 print(data[:4].hex(" "))  # d7 d0 cb 0c
 
 # The palette data seems to follow this pattern.
+assert src.palette is not None
 map = src.palette.palette[::3]
 print(hex(map[0xD7]), hex(map[0xD0]), hex(map[0xCB]))  # 0xd0 0xcb 0x0c
 
@@ -48,7 +49,7 @@ words = bz2.decompress(bytearray(bz2_data)).decode("utf-8").split()
 
 # Remove all python keywords from the text as well as ../ring/bell.html.
 # Need to add exec and print to the list because they are not python3 keywords.
-keywords = keyword.kwlist + ["../ring/bell.html", "exec", "print"]
+keywords = set(keyword.kwlist) | {"../ring/bell.html", "exec", "print"}
 print({w for w in words if w not in keywords})  # {'repeat', 'switch'}
 
 # Go to: http://www.pythonchallenge.com/pc/ring/bell.html

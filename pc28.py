@@ -11,6 +11,7 @@
 #   say it out loud
 
 import io
+from typing import cast
 
 import httpx
 from PIL import Image
@@ -23,6 +24,11 @@ src = Image.open(io.BytesIO(response.content))
 # There appears to be vertical lines encoded in the green channel.
 src.show()
 
+
+def getpixel(xy: tuple[int, int]) -> int:
+    return cast(tuple[int, ...], src.getpixel(xy))[1]
+
+
 # If you visit: http://www.pythonchallenge.com/pc/ring/green.html
 #   It says: "yes! green!"
 
@@ -30,15 +36,15 @@ src.show()
 nonpairs = []
 dst = Image.new(mode="RGB", size=(src.width, src.height))
 for y in range(src.height):
-    for l, r in zip(range(0, src.width - 1, 2), range(1, src.width, 2)):
-        if src.getpixel((l, y))[1] - src.getpixel((r, y))[1] == 42:
-            dst.putpixel((l, y), (255, 0, 0))
-            dst.putpixel((r, y), (255, 255, 255))
-        elif src.getpixel((l, y))[1] - src.getpixel((r, y))[1] == -42:
-            dst.putpixel((l, y), (255, 255, 0))
-            dst.putpixel((r, y), (255, 255, 255))
+    for a, b in zip(range(0, src.width - 1, 2), range(1, src.width, 2)):
+        if getpixel((a, y)) - getpixel((b, y)) == 42:
+            dst.putpixel((a, y), (255, 0, 0))
+            dst.putpixel((b, y), (255, 255, 255))
+        elif getpixel((a, y)) - getpixel((b, y)) == -42:
+            dst.putpixel((a, y), (255, 255, 0))
+            dst.putpixel((b, y), (255, 255, 255))
         else:
-            nonpairs.append(abs(src.getpixel((l, y))[1] - src.getpixel((r, y))[1]))
+            nonpairs.append(abs(getpixel((a, y)) - getpixel((b, y))))
 dst.show()
 
 # Decode the set of pairs that don't have a difference of 42.

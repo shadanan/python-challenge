@@ -46,12 +46,12 @@ def instability(c: complex, z: complex = 0.0, n: int = 128, r: int = 2) -> int:
     return n - 1
 
 
-def mandelbrot(l: float, t: float, w: float, h: float, vpw: int) -> Image.Image:
+def mandelbrot(L: float, t: float, w: float, h: float, vpw: int) -> Image.Image:
     vph = round(vpw / w * h)
     mandelbrot = Image.new(mode="L", size=(vpw, vph))
     for y in range(vph):
         for x in range(vpw):
-            c = complex(l + x * w / vpw, t + y * h / vph)
+            c = complex(L + x * w / vpw, t + y * h / vph)
             mandelbrot.putpixel((x, vph - y - 1), instability(c))
     return mandelbrot
 
@@ -64,7 +64,7 @@ gen = mandelbrot(0.34, 0.57, 0.036, 0.027, 640)
 err = []
 for y in range(src.height):
     for x in range(src.width):
-        p = gen.getpixel((x, y)) - src.getpixel((x, y))
+        p = gen.getpixel((x, y)) - src.getpixel((x, y))  # type: ignore
         if p == 16:
             err.append(0)
         elif p == -16:
