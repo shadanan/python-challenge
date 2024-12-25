@@ -7,8 +7,9 @@
 # solve the maze!
 
 import io
-import requests
 import zipfile
+
+import httpx
 from PIL import Image
 
 
@@ -31,7 +32,7 @@ class Maze:
         return len(self.maze)
 
     def visualize(self):
-        img = Image.new('RGB', (self.width, self.height))
+        img = Image.new("RGB", (self.width, self.height))
         for x in range(self.width):
             for y in range(self.height):
                 if self[x, y] == 0:
@@ -47,9 +48,13 @@ class Maze:
 
 
 def is_available(maze, pos):
-    return (pos[0] >= 0 and pos[1] >= 0 and
-            pos[0] < maze.width and pos[1] < maze.height and
-            maze[pos] == 0)
+    return (
+        pos[0] >= 0
+        and pos[1] >= 0
+        and pos[0] < maze.width
+        and pos[1] < maze.height
+        and maze[pos] == 0
+    )
 
 
 def neighbours(pos):
@@ -92,8 +97,9 @@ def solve(maze, start, exit):
 
 
 # Read the maze image
-response = requests.get('http://www.pythonchallenge.com/pc/hex/maze.png',
-                        auth=('butter', 'fly'))
+response = httpx.get(
+    "http://www.pythonchallenge.com/pc/hex/maze.png", auth=("butter", "fly")
+)
 img = Image.open(io.BytesIO(response.content))
 maze = Maze(img.width, img.height)
 
@@ -115,13 +121,13 @@ values = [img.getpixel(p)[0] for p in path]
 # The even values are all zero, and the odd values end up representing zip data
 zf = zipfile.ZipFile(io.BytesIO(bytearray(values[1::2])))
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # The files in the zip file are maze.jpg and mybroken.zip
     # Looks like we finally found Leopold's broken zip file!
-    print('\n'.join([x.filename for x in zf.filelist]))
+    print("\n".join([x.filename for x in zf.filelist]))
 
     # maze.jpg is a picture of a lake with the word "lake" in it
-    with zf.open('maze.jpg') as fp:
+    with zf.open("maze.jpg") as fp:
         Image.open(fp).show()
 
 # Go to: http://www.pythonchallenge.com/pc/hex/lake.html

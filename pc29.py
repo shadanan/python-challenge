@@ -22,9 +22,9 @@
 import bz2
 import re
 
-import requests
+import httpx
 
-response = requests.get(
+response = httpx.get(
     "http://www.pythonchallenge.com/pc/ring/guido.html", auth=("repeat", "switch")
 )
 

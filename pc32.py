@@ -22,8 +22,8 @@
 import itertools
 from typing import NamedTuple
 
+import httpx
 import numpy as np
-import requests
 from numpy.typing import NDArray
 from PIL import Image
 
@@ -114,7 +114,7 @@ def save_animation(frames: list[Image.Image], name: str, duration: int = 60):
 
 
 # Test the solver on the warmup puzzle.
-response = requests.get(
+response = httpx.get(
     "http://www.pythonchallenge.com/pc/rock/warmup.txt",
     auth=("kohsamui", "thailand"),
 )
@@ -124,7 +124,7 @@ frames[-1].show()
 save_animation(frames, "warmup.gif")
 
 # Run the solver on the larger puzzle.
-response = requests.get(
+response = httpx.get(
     "http://www.pythonchallenge.com/pc/rock/up.txt",
     auth=("kohsamui", "thailand"),
 )

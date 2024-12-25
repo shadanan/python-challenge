@@ -12,20 +12,23 @@
 # Maybe we should read even further ahead? Perhaps loop over the end value?
 
 import io
-import requests
 import zipfile
 
+import httpx
 
-def read_unreal(start, stop=''):
-    response = requests.get('http://www.pythonchallenge.com/pc/hex/unreal.jpg',
-                            auth=('butter', 'fly'),
-                            headers={'Range': f'bytes={start}-{stop}'})
 
-    if 'Content-Range' not in response.headers:
+def read_unreal(start, stop=""):
+    response = httpx.get(
+        "http://www.pythonchallenge.com/pc/hex/unreal.jpg",
+        auth=("butter", "fly"),
+        headers={"Range": f"bytes={start}-{stop}"},
+    )
+
+    if "Content-Range" not in response.headers:
         return None
 
-    nrange = response.headers['Content-Range']
-    result = [int(x) for x in nrange.split(' ')[1].split('/')[0].split('-')]
+    nrange = response.headers["Content-Range"]
+    result = [int(x) for x in nrange.split(" ")[1].split("/")[0].split("-")]
     result.append(response.content)
 
     return tuple(result)
@@ -70,15 +73,15 @@ zf = zipfile.ZipFile(io.BytesIO(data))
 
 # Now list files in the zip file:
 
-print('\n'.join([x.filename for x in zf.filelist]))
+print("\n".join([x.filename for x in zf.filelist]))
 
 # readme.txt
 # package.pack
 
 # And if we read readme.txt, it says:
 
-with zf.open('readme.txt', pwd=b'redavni') as fp:
-    print(fp.read().decode('utf-8'))
+with zf.open("readme.txt", pwd=b"redavni") as fp:
+    print(fp.read().decode("utf-8"))
 
 # Yes! This is really level 21 in here.
 # And yes, After you solve it, you'll be in level 22!

@@ -12,10 +12,10 @@
 
 import io
 
-import requests
+import httpx
 from PIL import Image
 
-response = requests.get(
+response = httpx.get(
     "http://www.pythonchallenge.com/pc/ring/bell.png", auth=("repeat", "switch")
 )
 src = Image.open(io.BytesIO(response.content))

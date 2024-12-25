@@ -12,24 +12,26 @@
 
 import email
 import io
-import requests
 import tempfile
 import wave
 
-response = requests.get('http://www.pythonchallenge.com/pc/hex/bin.html',
-                        auth=('butter', 'fly'))
+import httpx
+
+response = httpx.get(
+    "http://www.pythonchallenge.com/pc/hex/bin.html", auth=("butter", "fly")
+)
 data = response.text
 
 # According to the MIME type, the encoded data is a WAV file
 parser = email.parser.Parser()
-message = parser.parsestr(data[data.find('<!--')+5:data.find('-->')])
+message = parser.parsestr(data[data.find("<!--") + 5 : data.find("-->")])
 
 attachment = message.get_payload()[0]
 original_wav = attachment.get_payload(decode=True)
 
-with tempfile.NamedTemporaryFile(mode='wb', suffix='.wav', delete=False) as fp:
+with tempfile.NamedTemporaryFile(mode="wb", suffix=".wav", delete=False) as fp:
     fp.write(original_wav)
-    print(f'Original: {fp.name}')
+    print(f"Original: {fp.name}")
 
 # The decoded file is a bunch of static with a single word: "sorry"
 
@@ -40,14 +42,16 @@ with tempfile.NamedTemporaryFile(mode='wb', suffix='.wav', delete=False) as fp:
 # so that we double the amount of data points (first half of short becomes
 # the left channel and second half become the right channel)
 
-with tempfile.NamedTemporaryFile(mode='wb', suffix='.wav', delete=False) as fp, \
-        wave.open(io.BytesIO(original_wav)) as fp_r, \
-        wave.open(fp, 'wb') as fp_w:
+with (
+    tempfile.NamedTemporaryFile(mode="wb", suffix=".wav", delete=False) as fp,
+    wave.open(io.BytesIO(original_wav)) as fp_r,
+    wave.open(fp, "wb") as fp_w,
+):
     fp_w.setnchannels(2)
     fp_w.setsampwidth(1)
     fp_w.setframerate(fp_r.getframerate())
     fp_w.writeframes(fp_r.readframes(fp_r.getnframes()))
-    print(f'Corrected: {fp.name}')
+    print(f"Corrected: {fp.name}")
 
 # Open the corrected file and you hear "you are an idiot"
 # Go to: http://www.pythonchallenge.com/pc/hex/idiot.html

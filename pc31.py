@@ -26,18 +26,19 @@
 
 import io
 
-import requests
+import httpx
 from PIL import Image
 
 # Grab the mandelbrot image.
-response = requests.get(
+response = httpx.get(
     "http://www.pythonchallenge.com/pc/rock/mandelbrot.gif",
     auth=("kohsamui", "thailand"),
 )
 src = Image.open(io.BytesIO(response.content))
 
+
 # Functions to generate a mandelbrot image.
-def instability(c: complex, z: float = 0.0, n: int = 128, r: int = 2) -> int:
+def instability(c: complex, z: complex = 0.0, n: int = 128, r: int = 2) -> int:
     for i in range(n):
         z = z**2 + c
         if abs(z) > r:

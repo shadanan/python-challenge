@@ -12,12 +12,12 @@
 
 import math
 
+import httpx
 import pandas as pd
-import requests
 from PIL import Image
 
 # Grab the CSV file.
-response = requests.get(
+response = httpx.get(
     "http://www.pythonchallenge.com/pc/ring/yankeedoodle.csv", auth=("repeat", "switch")
 )
 

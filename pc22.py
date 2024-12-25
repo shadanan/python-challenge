@@ -8,11 +8,13 @@
 # white.gif!
 
 import io
-import requests
+
+import httpx
 from PIL import Image, ImageDraw
 
-response = requests.get('http://www.pythonchallenge.com/pc/hex/white.gif',
-                        auth=('butter', 'fly'))
+response = httpx.get(
+    "http://www.pythonchallenge.com/pc/hex/white.gif", auth=("butter", "fly")
+)
 im = Image.open(io.BytesIO(response.content))
 
 # white.gif contains 132 frames. Each frame has exactly one pixel that is not
@@ -30,7 +32,7 @@ for i in range(im.n_frames):
 directions = [((x - 100), (y - 100)) for x, y in pseq]
 
 # Now let's trace an image using the directions
-image = Image.new('P', (250, 60))
+image = Image.new("P", (250, 60))
 draw = ImageDraw.Draw(image)
 offset = 0
 curr = (offset, 25)

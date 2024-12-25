@@ -17,10 +17,10 @@ import bz2
 import io
 import keyword
 
-import requests
+import httpx
 from PIL import Image
 
-response = requests.get(
+response = httpx.get(
     "http://www.pythonchallenge.com/pc/hex/zigzag.gif", auth=("butter", "fly")
 )
 

@@ -32,38 +32,40 @@
 
 import bz2
 import io
-import requests
 import zipfile
 import zlib
 
+import httpx
 
 # Load the zip file from the previous challenge
-response = requests.get('http://www.pythonchallenge.com/pc/hex/unreal.jpg',
-                        auth=('butter', 'fly'),
-                        headers={'Range': f'bytes={1152983631}-'})
+response = httpx.get(
+    "http://www.pythonchallenge.com/pc/hex/unreal.jpg",
+    auth=("butter", "fly"),
+    headers={"Range": f"bytes={1152983631}-"},
+)
 zf = zipfile.ZipFile(io.BytesIO(response.content))
 
 
 # Open package.pack from the zip file using the password redavni
-with zf.open('package.pack', pwd=b'redavni') as fp:
+with zf.open("package.pack", pwd=b"redavni") as fp:
     sequence = []
     data = fp.read()
     while True:
-        if data.startswith(b'x\x9c'):
+        if data.startswith(b"x\x9c"):
             data = zlib.decompress(data)
-            sequence.append(' ')
-        elif data.startswith(b'BZ'):
+            sequence.append(" ")
+        elif data.startswith(b"BZ"):
             data = bz2.decompress(data)
-            sequence.append('x')
-        elif data.endswith(b'\x9cx') or data.endswith(b'ZB'):
+            sequence.append("x")
+        elif data.endswith(b"\x9cx") or data.endswith(b"ZB"):
             data = bytes(reversed(data))
-            sequence.append('\n')
+            sequence.append("\n")
         else:
-            print(bytes(reversed(data)).decode('utf-8'))
+            print(bytes(reversed(data)).decode("utf-8"))
             break
 
 len(sequence)
-print(''.join(sequence))
+print("".join(sequence))
 
 # The result is an ascii picture that says "copper"
 # Visit http://www.pythonchallenge.com/pc/hex/copper.html

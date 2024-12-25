@@ -11,15 +11,16 @@
 
 import io
 import itertools
-import requests
 import wave
-from PIL import Image
 
+import httpx
+from PIL import Image
 
 datas = []
 for i in itertools.count(1):
-    response = requests.get(f'http://www.pythonchallenge.com/pc/hex/lake{i}.wav',
-                            auth=('butter', 'fly'))
+    response = httpx.get(
+        f"http://www.pythonchallenge.com/pc/hex/lake{i}.wav", auth=("butter", "fly")
+    )
     if response.status_code == 200:
         datas.append(response.content)
     else:
@@ -31,7 +32,7 @@ frames = [w.readframes(w.getnframes()) for w in waves]
 # The hint "can you see the waves?" prompted me to put the data into an image.
 # The puzzle piece overlay hints at the layout of the image data.
 
-img = Image.new('RGB', (300, 300))
+img = Image.new("RGB", (300, 300))
 for i, frame in enumerate(frames):
     x_offset, y_offset = (i % 5) * 60, (i // 5) * 60
     for j, color in enumerate(zip(frame[0::3], frame[1::3], frame[2::3])):
