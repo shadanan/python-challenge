@@ -6,18 +6,19 @@
 # And the source mentions banner.p... unpicke it!
 
 import pickle
-import requests
 
-response = requests.get('http://www.pythonchallenge.com/pc/def/banner.p')
+import httpx
+
+response = httpx.get("http://www.pythonchallenge.com/pc/def/banner.p")
 data = pickle.loads(response.content)
 
 # The data basically specifies how to format some ascii characters
 
 for line in data:
     lineout = []
-    for token in line:
-        lineout.append(token[0] * token[1])
-    print(''.join(lineout))
+    for char, freq in line:
+        lineout.append(char * freq)
+    print("".join(lineout))
 
 # The result is an ascii picture that says "channel"
 # Go to: http://www.pythonchallenge.com/pc/def/channel.html

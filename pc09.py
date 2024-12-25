@@ -7,25 +7,31 @@
 # Source of the page says first+second=? and contains:
 # The image reminds me of connect the dots. So, let's connect the dots...
 
-import requests
+import httpx
 from PIL import Image, ImageDraw
 
-response = requests.get('http://www.pythonchallenge.com/pc/return/good.html',
-                        auth=('huge', 'file'))
-lines = response.text.strip().split('\n')
+type Coordinate = tuple[int, int]
 
-first = eval(f"[{''.join(lines[lines.index('first:')+1:lines.index('', lines.index('first:'))])}]")
-second = eval(f"[{''.join(lines[lines.index('second:')+1:lines.index('', lines.index('second:'))])}]")
 
-def connect_the_dots(draw, values):
-    coords = list(zip(values[0::2], values[1::2]))
-    for start, stop in zip(coords[0:-1], coords[1:]):
-        draw.line(start + stop, fill=255)
+def parse_coords(label: str) -> list[Coordinate]:
+    start = lines.index(label)
+    end = lines.index("", start)
+    csv = "".join(lines[start + 1 : end])
+    values = [int(v) for v in csv.split(",")]
+    return list(zip(values[0::2], values[1::2]))
 
-image = Image.new('P', (500, 500))
+
+response = httpx.get(
+    "http://www.pythonchallenge.com/pc/return/good.html", auth=("huge", "file")
+)
+lines = response.text.strip().splitlines()
+first = parse_coords("first:")
+second = parse_coords("second:")
+
+image = Image.new("RGB", (500, 500))
 draw = ImageDraw.Draw(image)
-connect_the_dots(draw, first)
-connect_the_dots(draw, second)
+draw.line(first, fill="white")
+draw.line(second, fill="white")
 image.show()
 
 # Looks like a picture of a bull...

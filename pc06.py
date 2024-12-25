@@ -5,10 +5,11 @@
 # There's a zipper... try getting channel.zip? And then use the zipfile library?
 
 import io
-import requests
 import zipfile
 
-response = requests.get('http://www.pythonchallenge.com/pc/def/channel.zip')
+import httpx
+
+response = httpx.get("http://www.pythonchallenge.com/pc/def/channel.zip")
 zfp = zipfile.ZipFile(io.BytesIO(response.content))
 
 # The zip file contains a readme.txt file. It says to start from 90052.
@@ -20,17 +21,15 @@ files = {zo.filename: zo for zo in zfp.filelist}
 
 comments = []
 while True:
-    zip_file = files[f'{nothing}.txt']
-    comments.append(zip_file.comment.decode('utf-8'))
+    zip_file = files[f"{nothing}.txt"]
+    comments.append(zip_file.comment.decode())
     with zfp.open(zip_file) as fp:
-        data = fp.read().decode('utf-8')
-    if data.startswith('Next nothing is '):
+        data = fp.read().decode()
+    if data.startswith("Next nothing is "):
         nothing = int(data.split()[-1])
     else:
         break
-
-print(data)
-print(''.join(comments))
+print("".join(comments))
 
 # The result is an ascii picture that says HOCKEY using the letter OXYGEN.
 # That must be what the title of the page referrs to (now there are pairs).

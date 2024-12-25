@@ -7,12 +7,15 @@
 # Try alligning the pink pixels.
 
 import io
-import requests
+
+import httpx
 from PIL import Image
 
-response = requests.get('http://www.pythonchallenge.com/pc/return/mozart.gif',
-                        auth=('huge', 'file'))
+response = httpx.get(
+    "http://www.pythonchallenge.com/pc/return/mozart.gif", auth=("huge", "file")
+)
 src = Image.open(io.BytesIO(response.content))
+
 
 def straighten(source):
     target = source.copy()
@@ -23,6 +26,7 @@ def straighten(source):
         for x, pixel in enumerate(line):
             target.putpixel((x, y), pixel)
     return target
+
 
 out = straighten(src)
 out.show()

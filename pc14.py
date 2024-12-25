@@ -8,14 +8,18 @@
 # Let's process the image "wire.png" in a spiral like fashion...
 
 import io
-import requests
+
+import httpx
 from PIL import Image
 
-response = requests.get('http://www.pythonchallenge.com/pc/return/wire.png',
-                        auth=('huge', 'file'))
+from utils import get_pixel
+
+response = httpx.get(
+    "http://www.pythonchallenge.com/pc/return/wire.png", auth=("huge", "file")
+)
 src = Image.open(io.BytesIO(response.content))
 
-img = Image.new('RGB', (100, 100))
+img = Image.new("RGB", (100, 100))
 data = []
 
 bnd = [0, 0, 99, 99]
@@ -23,7 +27,7 @@ vec = (1, 0)
 pos = (0, 0)
 
 for i in range(10000):
-    img.putpixel(pos, src.getpixel((i, 0)))
+    img.putpixel(pos, get_pixel(src, (i, 0)))
     pos = pos[0] + vec[0], pos[1] + vec[1]
 
     if vec[0] == 1 and pos[0] == bnd[2]:

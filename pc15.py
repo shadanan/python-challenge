@@ -13,6 +13,7 @@
 
 import datetime
 
+
 def is_leap_year(year):
     if year % 400 == 0:
         return True
@@ -23,9 +24,10 @@ def is_leap_year(year):
     else:
         return False
 
+
 valid_dates = []
 for i in range(99, 0, -1):
-    year = int(f'1{i}6')
+    year = int(f"1{i}6")
     d = datetime.datetime(year, 1, 26)
     if d.weekday() == 0 and is_leap_year(year):
         valid_dates.append(d)

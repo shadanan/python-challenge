@@ -7,7 +7,7 @@
 # length of the 30th element would be. The pattern is pretty
 # self evident. Just say it out loud.
 
-a = ['1', '11', '21', '1211', '111221']
+a = ["1", "11", "21", "1211", "111221"]
 
 while len(a) != 31:
     val = a[-1][0]
@@ -25,7 +25,7 @@ while len(a) != 31:
 
     curr.append(str(count))
     curr.append(val)
-    a.append(''.join(curr))
+    a.append("".join(curr))
 
 print(len(a[30]))
 

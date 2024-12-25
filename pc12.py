@@ -15,12 +15,15 @@
 # together (hint is the deck of cards). Let's re-assemble.
 
 import io
-import requests
+
+import httpx
 from PIL import Image, ImageFile
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-response = requests.get('http://www.pythonchallenge.com/pc/return/evil2.gfx',
-                        auth=('huge', 'file'))
+response = httpx.get(
+    "http://www.pythonchallenge.com/pc/return/evil2.gfx", auth=("huge", "file")
+)
 data = response.content
 
 images = [Image.open(io.BytesIO(data[i::5])) for i in range(5)]

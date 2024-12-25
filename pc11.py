@@ -6,11 +6,13 @@
 # pixel and assemble it.
 
 import io
-import requests
-from PIL import Image, ImageDraw
 
-response = requests.get('http://www.pythonchallenge.com/pc/return/cave.jpg',
-                        auth=('huge', 'file'))
+import httpx
+from PIL import Image
+
+response = httpx.get(
+    "http://www.pythonchallenge.com/pc/return/cave.jpg", auth=("huge", "file")
+)
 src_image = Image.open(io.BytesIO(response.content))
 
 src_data = src_image.getdata()
@@ -20,13 +22,10 @@ for index, value in enumerate(src_data):
     if (index // 640) % 2 == 0:
         if index % 2 == 0:
             dest_data.append(value)
-    else:
-        if index % 2 == 1:
-            dest_data.append(value)
 
 src_image.size
 
-dest_image = Image.new('RGB', (640, 240))
+dest_image = Image.new("RGB", (320, 240))
 dest_image.putdata(dest_data)
 dest_image.show()
 

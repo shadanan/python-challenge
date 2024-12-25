@@ -4,22 +4,19 @@
 # Start at: http://www.pythonchallenge.com/pc/def/ocr.html
 # Get the characters from the source of the page
 
-import requests
+from collections import Counter
 
-response = requests.get('http://www.pythonchallenge.com/pc/def/ocr.html')
+import httpx
+
+response = httpx.get("http://www.pythonchallenge.com/pc/def/ocr.html")
 data = response.text.strip()
-chars = data[data.find('%%'):-4]
+chars = data[data.find("%%") : -4]
 
-hist = {}
-for char in chars:
-    hist[char] = hist.get(char, 0) + 1
+hist = Counter(chars)
 
-rarechars = [x[0] for x in hist.items() if x[1] == 1]
-result = []
-for char in chars:
-    if char in rarechars:
-        result.append(char)
-print(''.join(result))
+rarechars = [char for char, freq in hist.items() if freq == 1]
+result = [char for char in chars if char in rarechars]
+print("".join(result))
 
 # Result is equality
 # Go to: http://www.pythonchallenge.com/pc/def/equality.html

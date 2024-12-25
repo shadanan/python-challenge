@@ -18,50 +18,40 @@
 # center that appears to be the start of the puzzle.
 
 import io
+from math import sqrt
 
-import requests
+import httpx
+from IPython.display import display
 from PIL import Image
 
 # Grab the puzzle image.
-response = requests.get(
+response = httpx.get(
     "http://www.pythonchallenge.com/pc/rock/beer2.png",
     auth=("kohsamui", "thailand"),
 )
 src = Image.open(io.BytesIO(response.content))
 src.show()
 
-import pandas as pd
+# Iterate over the image data selecting only those pixels that are less than or equal
+# to a specific max brightness. If the remaining data forms a perfect square, render
+# the pixels that are equal to the max brightness as white, and black otherwise.
 
-pd.set_option("display.max_rows", None)
-pd.set_option("display.max_columns", None)
+images = {}
+for pixel in reversed(sorted(set(src.getdata()))):
+    data = [1 if p == pixel else 0 for p in src.getdata() if p <= pixel]
+    root = int(sqrt(len(data)))
+    if root * root != len(data):
+        continue
+    dst = Image.new("1", (root, root))
+    dst.putdata(data)
+    images[pixel] = dst
 
-pixels = pd.Series(list(src.getdata()))
-pixels.value_counts().sort_index()
-pixels.value_counts().sort_index().plot.bar(figsize=(12, 6))
+# This results in a number of letters, some of which are surrounded by a box. These
+# letters spell out the word "gremlins".
+for pixel in [98, 86, 62, 56, 44, 32, 26, 14]:
+    images[pixel].show()
 
-import numpy as np
+# Go to: http://www.pythonchallenge.com/pc/rock/gremlins.html
+# User: kohsamui, Pass: thailand
 
-pd.DataFrame(np.array(src))
-import sys
-
-np.set_printoptions(threshold=sys.maxsize)
-
-dst = src.copy()
-for y in range(dst.height):
-    for x in range(dst.width):
-        if dst.getpixel((x, y)) % 2 == 0:
-            dst.putpixel((x, y), 0)
-        elif dst.getpixel((x, y)) % 2 == 1:
-            dst.putpixel((x, y), 255)
-dst
-
-dst = Image.new(mode="RGB", size=(src.width // 3, src.height))
-for y in range(dst.height):
-    for x in range(dst.width):
-        color = (
-            src.getpixel((x * 3, y)),
-            src.getpixel((x * 3 + 1, y)),
-            src.getpixel((x * 3 + 2, y)),
-        )
-        dst.putpixel((x, y), color)
-dst
+# We've reached the Temporary End!
