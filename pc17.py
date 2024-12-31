@@ -14,8 +14,7 @@
 # The cookie data is URL encoded. So we need to decode and replace '+' with ' '.
 
 import bz2
-import urllib.parse
-import urllib.request
+from urllib.parse import unquote_to_bytes
 from xmlrpc.client import ServerProxy
 
 import httpx
@@ -40,9 +39,7 @@ while True:
     else:
         break
 
-bzip_data = urllib.parse.unquote_to_bytes(
-    "".join([" " if x == "+" else x for x in cookie_data])
-)
+bzip_data = unquote_to_bytes("".join([" " if x == "+" else x for x in cookie_data]))
 
 # The cookie data looks like bz2 data... let's decompress
 print(bz2.decompress(bzip_data).decode("utf-8"))
