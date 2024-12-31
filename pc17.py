@@ -18,28 +18,34 @@ import urllib.parse
 import urllib.request
 from xmlrpc.client import ServerProxy
 
+import httpx
+
+from utils import GZipDisabled
+
 cookie_data = []
 nothing = 12345
 
 while True:
-    url = f'http://www.pythonchallenge.com/pc/def/linkedlist.php?busynothing={nothing}'
-    response = urllib.request.urlopen(url)
+    url = f"http://www.pythonchallenge.com/pc/def/linkedlist.php?busynothing={nothing}"
+    resp = httpx.get(url)
 
-    next_char = response.info()['Set-Cookie'].split(';')[0].split('=')[-1]
-    data = response.read().decode('utf-8')
+    next_char = resp.cookies["info"]
+    data = resp.text
     cookie_data.append(next_char)
 
-    print(f'Data: {data}  \tNext Char: {next_char}')
+    print(f"Data: {data}  \tNext Char: {next_char}")
 
-    if 'busynothing is' in data:
-        nothing = int(data[data.find('busynothing is'):].split()[2])
+    if "busynothing is" in data:
+        nothing = int(data[data.find("busynothing is") :].split()[2])
     else:
         break
 
-bzip_data = urllib.parse.unquote_to_bytes(''.join([' ' if x == '+' else x for x in cookie_data]))
+bzip_data = urllib.parse.unquote_to_bytes(
+    "".join([" " if x == "+" else x for x in cookie_data])
+)
 
 # The cookie data looks like bz2 data... let's decompress
-print(bz2.decompress(bzip_data).decode('utf-8'))
+print(bz2.decompress(bzip_data).decode("utf-8"))
 
 # The result is:
 # is it the 26th already? call his father and inform him that 'the flowers are on their way'. he'll understand.
@@ -47,20 +53,19 @@ print(bz2.decompress(bzip_data).decode('utf-8'))
 # Head back to the phone book from Challenge 13:
 
 print("Calling Mozart's father, Leopold...")
-server = ServerProxy('http://www.pythonchallenge.com/pc/phonebook.php')
-print(server.phone('Leopold'))
+server = ServerProxy("http://www.pythonchallenge.com/pc/phonebook.php", GZipDisabled())
+print(server.phone("Leopold"))
 
 # Result is 555-VIOLIN.
 
 # Go to: http://www.pythonchallenge.com/pc/stuff/violin.php
-# and set the cookie value to 'the flowers are on their way' (remember to
-# encode ' ' as '+')
+# and set the cookie value to 'the flowers are on their way'
 
-headers = {}
-headers['Cookie'] = 'info=the+flowers+are+on+their+way'
-request = urllib.request.Request('http://www.pythonchallenge.com/pc/stuff/violin.php', headers=headers)
-response = urllib.request.urlopen(request)
-print(response.read().decode('utf-8'))
+resp = httpx.get(
+    "http://www.pythonchallenge.com/pc/stuff/violin.php",
+    cookies={"info": "the flowers are on their way"},
+)
+print(resp.text)
 
 # Leopold says: "oh well, don't you dare to forget the balloons."
 # Go to: http://www.pythonchallenge.com/pc/return/balloons.html

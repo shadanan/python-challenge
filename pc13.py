@@ -9,7 +9,9 @@
 
 from xmlrpc.client import ServerProxy
 
-server = ServerProxy("http://www.pythonchallenge.com/pc/phonebook.php")
+from utils import GZipDisabled
+
+server = ServerProxy("http://www.pythonchallenge.com/pc/phonebook.php", GZipDisabled())
 
 print(server.phone("Bert"))
 
