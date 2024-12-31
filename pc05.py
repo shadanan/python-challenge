@@ -15,10 +15,7 @@ data = pickle.loads(response.content)
 # The data basically specifies how to format some ascii characters
 
 for line in data:
-    lineout = []
-    for char, freq in line:
-        lineout.append(char * freq)
-    print("".join(lineout))
+    print("".join(char * freq for char, freq in line))
 
 # The result is an ascii picture that says "channel"
 # Go to: http://www.pythonchallenge.com/pc/def/channel.html
